@@ -170,7 +170,7 @@ public:
 	void ReadAudioFrames(const void *srcAudioBuffer, const size_t inSampleCount);
 };
 
-bool DRV_AviBegin(const char *fileName);
+bool DRV_AviBegin(const char *fileName, bool recBottomScreen);
 void DRV_AviEnd();
 bool AVI_IsRecording();
 

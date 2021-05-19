@@ -32,6 +32,7 @@
 
 NDSCaptureObject *captureObject = NULL;
 bool AVIFileStream::__needAviLibraryInit = true;
+bool recordBottomScreen = false;
 
 static void EMU_PrintError(const char* msg)
 {
@@ -823,7 +824,7 @@ void NDSCaptureObject::ReadAudioFrames(const void *srcAudioBuffer, const size_t 
 	this->_pendingAudioWriteSize[bufferIndex] += soundSize;
 }
 
-bool DRV_AviBegin(const char *fileName)
+bool DRV_AviBegin(const char *fileName, bool recBottomScreen)
 {
 	HRESULT error = S_OK;
 	bool result = true;
@@ -838,7 +839,17 @@ bool DRV_AviBegin(const char *fileName)
 	wf.wFormatTag = WAVE_FORMAT_PCM;
 	 
 	const NDSDisplayInfo &dispInfo = GPU->GetDisplayInfo();
-	NDSCaptureObject *newCaptureObject = new NDSCaptureObject(dispInfo.customWidth, dispInfo.customHeight, &wf);
+
+	NDSCaptureObject* newCaptureObject;
+
+	recordBottomScreen = recBottomScreen;
+
+	if (recordBottomScreen) {
+		newCaptureObject = new NDSCaptureObject(dispInfo.customWidth, dispInfo.customHeight, &wf);
+	}
+	else {
+		newCaptureObject = new NDSCaptureObject(dispInfo.customWidth, dispInfo.customHeight / 2, &wf);
+	}
 
 	error = newCaptureObject->OpenFileStream(fileName);
 	if (FAILED(error))
@@ -876,7 +887,12 @@ void DRV_AviVideoUpdate(const void* srcVideoFrame, const NDSDisplayInfo &display
 		return;
 	}
 
-	captureObject->ReadVideoFrame(displayInfo.masterCustomBuffer, displayInfo.customWidth, displayInfo.customHeight, displayInfo.colorFormat);
+	if (recordBottomScreen) {
+		captureObject->ReadVideoFrame(srcVideoFrame, displayInfo.customWidth, displayInfo.customHeight, displayInfo.colorFormat);
+	}
+	else {
+		captureObject->ReadVideoFrame(srcVideoFrame, displayInfo.customWidth, displayInfo.customHeight / 2, displayInfo.colorFormat);
+	}
 }
 
 void DRV_AviSoundUpdate(void *soundData, const int soundLen)

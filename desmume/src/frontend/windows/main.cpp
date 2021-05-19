@@ -2951,7 +2951,27 @@ void AviRecordTo()
 			driver->AddLine("AVI recording ended.");
 		}
 
-		bool result = DRV_AviBegin(outFilename);
+		bool recBottomScreen = false;
+
+		int msgboxID = MessageBox(
+			NULL,
+			"Do you want to record bottom screen?",
+			"Recording options",
+			MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON1
+		);
+
+		switch (msgboxID)
+		{
+		case IDYES:
+			recBottomScreen = true;
+			break;
+		case IDNO:
+			recBottomScreen = false;
+			break;
+		}
+
+		bool result = DRV_AviBegin(outFilename, recBottomScreen);
+
 		if (result)
 		{
 			LOG("AVI recording started.");
