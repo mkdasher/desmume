@@ -1,6 +1,8 @@
-# DeSmuME
-[![AppVeyor CI Build Status](https://ci.appveyor.com/api/projects/status/abfd7jm09wnmxyvu?svg=true)](https://ci.appveyor.com/project/zeromus/desmume)
+# DeSmuME Recording Edition
 
-DeSmuME is a Nintendo DS emulator.
+This is a DeSmuME fork. Current added features:
+
+- Widescreen
+- Lua recording
 
 http://desmume.org/download
