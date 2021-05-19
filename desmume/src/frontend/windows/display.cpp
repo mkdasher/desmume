@@ -681,18 +681,6 @@ void DoDisplay()
 		return;
 	displayNoPostponeNext = false;
 
-	//we have to do a copy here because we're about to draw the OSD onto it. bummer.
-	if (gpu_bpp == 15)
-		ColorspaceConvertBuffer555To8888Opaque<true, false>((u16 *)video.srcBuffer, video.buffer, video.srcBufferSize / 2);
-	else
-		ColorspaceConvertBuffer888XTo8888Opaque<true, false>((u32*)video.srcBuffer, video.buffer, video.srcBufferSize / 4);
-
-	//some games use the backlight for fading effects
-	const size_t pixCount = video.prefilterWidth * video.prefilterHeight / 2;
-	const NDSDisplayInfo &displayInfo = GPU->GetDisplayInfo();
-	ColorspaceApplyIntensityToBuffer32<false, false>(video.buffer, pixCount, displayInfo.backlightIntensity[NDSDisplayID_Main]);
-	ColorspaceApplyIntensityToBuffer32<false, false>(video.buffer + pixCount, pixCount, displayInfo.backlightIntensity[NDSDisplayID_Touch]);
-
 	// Lua draws to the HUD buffer, so clear it here instead of right before redrawing the HUD.
 	aggDraw.hud->clear();
 	if (AnyLuaActive())
@@ -707,6 +695,20 @@ void DoDisplay()
 			CallRegisteredLuaFunctions(LUACALL_AFTEREMULATIONGUI);
 		}
 	}
+	if (displayMethod == DISPMETHOD_DDRAW_HW || displayMethod == DISPMETHOD_DDRAW_SW)
+	{
+		if (displayBufferToAvi != video.srcBuffer) {
+			// DirectDraw doesn't support alpha blending, so we must scale and overlay the HUD ourselves.
+			T_AGG_RGBA target((u8*)video.srcBuffer, video.prefilterWidth, video.prefilterHeight, video.prefilterWidth * 4);
+			target.transformImage(aggDraw.hud->image<T_AGG_PF_BGRA>(), 0, 0, video.prefilterWidth, video.prefilterHeight);
+		}
+	}
+
+	//we have to do a copy here because we're about to draw the OSD onto it. bummer.
+	if (gpu_bpp == 15)
+		ColorspaceConvertBuffer555To8888Opaque<true, false>((u16 *)video.srcBuffer, video.buffer, video.srcBufferSize / 2);
+	else
+		ColorspaceConvertBuffer888XTo8888Opaque<true, false>((u32*)video.srcBuffer, video.buffer, video.srcBufferSize / 4);
 
 	// draw hud
 	DoDisplay_DrawHud();
@@ -717,8 +719,16 @@ void DoDisplay()
 		target.transformImage(aggDraw.hud->image<T_AGG_PF_RGBA>(), 0, 0, video.prefilterWidth, video.prefilterHeight);
 	}
 
+	//some games use the backlight for fading effects
+	const size_t pixCount = video.prefilterWidth * video.prefilterHeight / 2;
+	const NDSDisplayInfo &displayInfo = GPU->GetDisplayInfo();
+	ColorspaceApplyIntensityToBuffer32<false, false>(video.buffer, pixCount, displayInfo.backlightIntensity[NDSDisplayID_Main]);
+	ColorspaceApplyIntensityToBuffer32<false, false>(video.buffer + pixCount, pixCount, displayInfo.backlightIntensity[NDSDisplayID_Touch]);
+
 	//apply user's filter
 	video.filter();
+
+	displayBufferToAvi = video.srcBuffer;
 
 	if (displayMethod == DISPMETHOD_DDRAW_HW || displayMethod == DISPMETHOD_DDRAW_SW)
 	{

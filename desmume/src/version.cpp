@@ -111,7 +111,7 @@
 #elif defined(PUBLIC_RELEASE)
 	#define DESMUME_SUBVERSION_STRING ""
 #else
-	#define DESMUME_SUBVERSION_STRING " git#" SVN_REV_STR
+	#define DESMUME_SUBVERSION_STRING " WiDeScreen" 
 #endif
 
 #ifdef __INTEL_COMPILER

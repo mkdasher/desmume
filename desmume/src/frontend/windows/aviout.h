@@ -175,7 +175,7 @@ void DRV_AviEnd();
 bool AVI_IsRecording();
 
 void DRV_AviFrameStart();
-void DRV_AviVideoUpdate(const NDSDisplayInfo &displayInfo);
+void DRV_AviVideoUpdate(const void* srcVideoFrame, const NDSDisplayInfo& displayInfo);
 void DRV_AviSoundUpdate(void *soundData, const int soundLen);
 void DRV_AviFileWriteStart();
 void DRV_AviFileWriteFinish();

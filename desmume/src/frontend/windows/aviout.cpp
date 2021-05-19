@@ -869,7 +869,7 @@ void DRV_AviFrameStart()
 	captureObject->StartFrame();
 }
 
-void DRV_AviVideoUpdate(const NDSDisplayInfo &displayInfo)
+void DRV_AviVideoUpdate(const void* srcVideoFrame, const NDSDisplayInfo &displayInfo)
 {
 	if (!AVI_IsRecording())
 	{

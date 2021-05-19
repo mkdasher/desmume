@@ -1,4 +1,4 @@
-# DeSmuME Recording Edition
+# DeSmuME WiDeScreen Edition
 
 This is a DeSmuME fork. Current added features:
 

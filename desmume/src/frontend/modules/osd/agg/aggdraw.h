@@ -218,11 +218,13 @@ namespace agg
 
 
 
-typedef PixFormatSetDeclaration<agg::my_pixfmt_rgb555,agg::my_pixfmt_rgb555_pre,agg::span_simple_blur_rgb24<agg::order_rgba> > T_AGG_PF_RGB555;
+typedef PixFormatSetDeclaration<agg::my_pixfmt_rgb555, agg::my_pixfmt_rgb555_pre, agg::span_simple_blur_rgb24<agg::order_rgba> > T_AGG_PF_RGB555;
 #if defined(WIN32) 
-typedef PixFormatSetDeclaration<agg::pixfmt_bgra32,agg::pixfmt_bgra32_pre,agg::span_simple_blur_rgb24<agg::order_rgba> > T_AGG_PF_RGBA;
+typedef PixFormatSetDeclaration<agg::pixfmt_bgra32, agg::pixfmt_bgra32_pre, agg::span_simple_blur_rgb24<agg::order_rgba> > T_AGG_PF_RGBA;
+typedef PixFormatSetDeclaration<agg::pixfmt_rgba32, agg::pixfmt_rgba32_pre, agg::span_simple_blur_rgb24<agg::order_bgra> > T_AGG_PF_BGRA;
 #else
-typedef PixFormatSetDeclaration<agg::pixfmt_bgra32,agg::pixfmt_bgra32_pre,agg::span_simple_blur_rgb24<agg::order_rgba> > T_AGG_PF_RGBA;
+typedef PixFormatSetDeclaration<agg::pixfmt_bgra32, agg::pixfmt_bgra32_pre, agg::span_simple_blur_rgb24<agg::order_rgba> > T_AGG_PF_RGBA;
+typedef PixFormatSetDeclaration<agg::pixfmt_rgba32, agg::pixfmt_rgba32_pre, agg::span_simple_blur_rgb24<agg::order_bgra> > T_AGG_PF_BGRA;
 #endif
 
 class AggDrawTarget
@@ -302,6 +304,7 @@ public:
     virtual void noLine() = 0;
 
 	virtual void transformImage(const Agg2DBase::Image<T_AGG_PF_RGBA> &img, double dstX1, double dstY1, double dstX2, double dstY2) = 0;
+	virtual void transformImage(const Agg2DBase::Image<T_AGG_PF_BGRA>& img, double dstX1, double dstY1, double dstX2, double dstY2) = 0;
 	//virtual void transformImage(const Agg2DBase::Image<T_AGG_PF_RGB555> &img, double dstX1, double dstY1, double dstX2, double dstY2) = 0;
 
     virtual AggColor fillColor() = 0;
@@ -541,6 +544,7 @@ public:
 	virtual bool fillEvenOdd() {return BASE::fillEvenOdd();};
 
 	virtual void transformImage(const Agg2DBase::Image<T_AGG_PF_RGBA>& img, double dstX1, double dstY1, double dstX2, double dstY2) { BASE::transformImage(img,dstX1,dstY1,dstX2,dstY2); }
+	virtual void transformImage(const Agg2DBase::Image<T_AGG_PF_BGRA>& img, double dstX1, double dstY1, double dstX2, double dstY2) { BASE::transformImage(img, dstX1, dstY1, dstX2, dstY2); }
 	//virtual void transformImage(const Agg2DBase::Image<T_AGG_PF_RGB555> &img, double dstX1, double dstY1, double dstX2, double dstY2)  { BASE::transformImage(img,dstX1,dstY1,dstX2,dstY2); }
 
     // Transformations

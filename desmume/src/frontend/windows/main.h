@@ -30,6 +30,8 @@ extern HMENU mainMenu; //Holds handle to the main DeSmuME menu
 extern CToolBar* MainWindowToolbar;
 extern CRITICAL_SECTION win_backbuffer_sync;
 
+extern void* displayBufferToAvi;
+
 extern volatile bool execute, paused;
 extern bool romloaded;
 bool NDS_Pause(bool showMsg = true);

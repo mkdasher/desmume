@@ -407,6 +407,8 @@ u32 glock = 0;
 BOOL finished = FALSE;
 bool romloaded = false;
 
+void* displayBufferToAvi = NULL;
+
 void SetScreenGap(int gap);
 
 float DefaultWidth;
@@ -463,7 +465,7 @@ public:
 			return;
 		}
 
-		DRV_AviVideoUpdate(latestDisplayInfo);
+		DRV_AviVideoUpdate(displayBufferToAvi, latestDisplayInfo);
 	}
 };
 
