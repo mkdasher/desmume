@@ -2663,7 +2663,7 @@ static void prepare_reading()
 #if defined(WIN32_FRONTEND)
 		extern VideoInfo video;
 		curGuiData.data = video.buffer;
-		curGuiData.stridePix = 256;
+		curGuiData.stridePix = 640;
 #endif
 	}
 #endif
@@ -5308,11 +5308,11 @@ void ResetInfo(LuaContextInfo& info)
 	info.guiData.stridePix = GPU_FRAMEBUFFER_NATIVE_WIDTH;
 #endif
 	info.guiData.xMin = 0;
-	info.guiData.xMax = 256;
+	info.guiData.xMax = 640;
 	info.guiData.yMin = 0;
-	info.guiData.yMax = 192 * 2;
+	info.guiData.yMax = 360 * 2;
 	info.guiData.xOrigin = 0;
-	info.guiData.yOrigin = 192;
+	info.guiData.yOrigin = 360;
 }
 
 void OpenLuaContext(int uid, void(*print)(int uid, const char* str), void(*onstart)(int uid), void(*onstop)(int uid, bool statusOK))
