@@ -151,7 +151,7 @@ void HudStruct::reset()
 	InputDisplay.ysize=10;
 
 	GraphicalInputDisplay.x=8;
-	GraphicalInputDisplay.y=328;
+	GraphicalInputDisplay.y=662;
 	GraphicalInputDisplay.xsize=102;
 	GraphicalInputDisplay.ysize=50;
 
@@ -416,6 +416,12 @@ static void OSD_HandleTouchDisplay() {
 	temptouch.X = NDS_getRawUserInput().touch.touchX >> 4;
 	temptouch.Y = NDS_getRawUserInput().touch.touchY >> 4;
 
+	int scale = 1;
+	int nativeHeight = 192;
+	int nativeWidth = 256;
+	int customHeight = 360;
+	int customWidth = 640;
+
 	if(touchshadow) {
 
 		touch.push_back(temptouch);
@@ -424,28 +430,34 @@ static void OSD_HandleTouchDisplay() {
 		for (int i = 0; i < 8; i++) {
 			temptouch = touch[i];
 			if(temptouch.X != 0 || temptouch.Y != 0) {
+				temptouch.X = temptouch.X * scale * customWidth / nativeWidth;
+				temptouch.Y = temptouch.Y * scale * customHeight / nativeHeight;
 				aggDraw.hud->lineColor(0, 255, 0, touchalpha[i]);
-				aggDraw.hud->line(temptouch.X - 256, temptouch.Y + 192, temptouch.X + 256, temptouch.Y + 192); //horiz
-				aggDraw.hud->line(temptouch.X, temptouch.Y - 256, temptouch.X, temptouch.Y + 384); //vert
+				aggDraw.hud->line(temptouch.X - customWidth, temptouch.Y + customHeight, temptouch.X + customWidth, temptouch.Y + customHeight); //horiz
+				aggDraw.hud->line(temptouch.X, temptouch.Y - customWidth, temptouch.X, temptouch.Y + customHeight * 2); //vert
 				aggDraw.hud->fillColor(0, 0, 0, touchalpha[i]);
-				aggDraw.hud->rectangle(temptouch.X-1, temptouch.Y + 192-1, temptouch.X+1, temptouch.Y + 192+1);
+				aggDraw.hud->rectangle(temptouch.X-1, temptouch.Y + customHeight-1, temptouch.X+1, temptouch.Y + customHeight+1);
 			}
 		}
 	}
 	else
 		if(NDS_getRawUserInput().touch.isTouch) {
+			temptouch.X = temptouch.X * scale * customWidth / nativeWidth;
+			temptouch.Y = temptouch.Y * scale * customHeight / nativeHeight;
 			aggDraw.hud->lineColor(0, 255, 0, 128);
-			aggDraw.hud->line(temptouch.X - 256, temptouch.Y + 192, temptouch.X + 256, temptouch.Y + 192); //horiz
-			aggDraw.hud->line(temptouch.X, temptouch.Y - 256, temptouch.X, temptouch.Y + 384); //vert
+			aggDraw.hud->line(temptouch.X - customWidth, temptouch.Y + customHeight, temptouch.X + customWidth, temptouch.Y + customHeight); //horiz
+			aggDraw.hud->line(temptouch.X, temptouch.Y - customWidth, temptouch.X, temptouch.Y + customHeight * 2); //vert
 		}
 
 	if(nds.isTouch)
 	{
 		temptouch.X = nds.scr_touchX / 16;
 		temptouch.Y = nds.scr_touchY / 16;
+		temptouch.X = temptouch.X * scale * customWidth / nativeWidth;
+		temptouch.Y = temptouch.Y * scale * customHeight / nativeHeight;
 		aggDraw.hud->lineColor(255, 0, 0, 128);
-		aggDraw.hud->line(temptouch.X - 256, temptouch.Y + 192, temptouch.X + 256, temptouch.Y + 192); //horiz
-		aggDraw.hud->line(temptouch.X, temptouch.Y - 256, temptouch.X, temptouch.Y + 384); //vert
+		aggDraw.hud->line(temptouch.X - customWidth, temptouch.Y + customHeight, temptouch.X + customWidth, temptouch.Y + customHeight); //horiz
+		aggDraw.hud->line(temptouch.X, temptouch.Y - customWidth, temptouch.X, temptouch.Y + customHeight * 2); //vert
 	}
 
 }
@@ -603,7 +615,7 @@ OSDCLASS::OSDCLASS(u8 core)
 
 	lastLineText=0;
 	lineText_x = 5;
-	lineText_y = 120;
+	lineText_y = 250;
 	lineText_color = AggColor(255, 255, 255);
 	for (int i=0; i < OSD_MAX_LINES+1; i++)
 	{
