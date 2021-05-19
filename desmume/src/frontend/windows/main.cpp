@@ -760,7 +760,7 @@ void UnscaleScreenCoords(s32& x, s32& y)
 			}
 
 	x = video.dividebyratio(x);
-	y = video.dividebyratio(y);
+	y = video.dividebyratio(y * 4 / 3);
 }
 
 // input x,y should be windows client-space coords already at 1x scaling.
@@ -2288,7 +2288,7 @@ int _main()
 	CommonSettings.GFX3D_Renderer_TextureScalingFactor = (cmdline.texture_upscale != -1) ? cmdline.texture_upscale : GetValid3DIntSetting("TextureScalingFactor", 1, possibleTexScale, 3);
 	int newPrescaleHD = (cmdline.gpu_resolution_multiplier != -1) ? cmdline.gpu_resolution_multiplier : GetPrivateProfileInt("3D", "PrescaleHD", 1, IniName);
 	video.SetPrescale(newPrescaleHD, 1);
-	GPU->SetCustomFramebufferSize(GPU_FRAMEBUFFER_NATIVE_WIDTH*video.prescaleHD, GPU_FRAMEBUFFER_NATIVE_HEIGHT*video.prescaleHD);
+	GPU->SetCustomFramebufferSize(640 * video.prescaleHD, 360 * video.prescaleHD);
 	SyncGpuBpp();
 	GPU->ClearWithColor(0xFFFFFF);
 
@@ -2971,7 +2971,6 @@ void AviRecordTo()
 		}
 
 		bool result = DRV_AviBegin(outFilename, recBottomScreen);
-
 		if (result)
 		{
 			LOG("AVI recording started.");
@@ -5938,7 +5937,7 @@ LRESULT CALLBACK GFX3DSettingsDlgProc(HWND hw, UINT msg, WPARAM wp, LPARAM lp)
 						if (newPrescaleHD != video.prescaleHD)
 						{
 							video.SetPrescale(newPrescaleHD, 1);
-							GPU->SetCustomFramebufferSize(GPU_FRAMEBUFFER_NATIVE_WIDTH*video.prescaleHD, GPU_FRAMEBUFFER_NATIVE_HEIGHT*video.prescaleHD);
+							GPU->SetCustomFramebufferSize(640 * video.prescaleHD, 360 * video.prescaleHD);
 						}
 						SyncGpuBpp();
 						UpdateScreenRects();

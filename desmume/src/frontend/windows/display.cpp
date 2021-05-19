@@ -151,6 +151,9 @@ struct DisplayLayoutInfo
 //performs aspect ratio letterboxing correction and integer clamping
 DisplayLayoutInfo CalculateDisplayLayout(RECT rcClient, bool maintainAspect, bool maintainInteger, int targetWidth, int targetHeight)
 {
+
+	targetWidth = targetWidth * 4 / 3;
+
 	DisplayLayoutInfo ret;
 
 	//do maths on the viewport and the native resolution and the user settings to get a display rectangle

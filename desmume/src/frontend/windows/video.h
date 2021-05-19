@@ -64,8 +64,8 @@ public:
 
 			this->prescaleHD = prescaleHD;
 			this->prescalePost = prescalePost;
-			prefilterWidth = 256 * prescaleHD;
-			prefilterHeight = 192 * 2 * prescaleHD;
+			prefilterWidth = 640 * prescaleHD;
+			prefilterHeight = 360 * 2 * prescaleHD;
 
 			prescaleTotal = prescaleHD;
 
