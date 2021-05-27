@@ -151,9 +151,6 @@ struct DisplayLayoutInfo
 //performs aspect ratio letterboxing correction and integer clamping
 DisplayLayoutInfo CalculateDisplayLayout(RECT rcClient, bool maintainAspect, bool maintainInteger, int targetWidth, int targetHeight)
 {
-
-	targetWidth = targetWidth * 4 / 3;
-
 	DisplayLayoutInfo ret;
 
 	//do maths on the viewport and the native resolution and the user settings to get a display rectangle
@@ -782,7 +779,7 @@ void UpdateWndRects(HWND hwnd, RECT* newClientRect)
 
 	if (video.layout == 1) //horizontal
 	{
-		rc = CalculateDisplayLayoutWrapper(rc, (int)((float)GPU_FRAMEBUFFER_NATIVE_WIDTH * 2 / screenSizeRatio), GPU_FRAMEBUFFER_NATIVE_HEIGHT, tbheight, maximized);
+		rc = CalculateDisplayLayoutWrapper(rc, (int)((float)GPU_FRAMEBUFFER_NATIVE_WIDTH * 2 * 4 / 3 / screenSizeRatio), GPU_FRAMEBUFFER_NATIVE_HEIGHT, tbheight, maximized);
 
 		wndWidth = (rc.bottom - rc.top) - tbheight;
 		wndHeight = (rc.right - rc.left);
@@ -824,7 +821,7 @@ void UpdateWndRects(HWND hwnd, RECT* newClientRect)
 	else
 		if (video.layout == 2) //one screen
 		{
-			rc = CalculateDisplayLayoutWrapper(rc, GPU_FRAMEBUFFER_NATIVE_WIDTH, GPU_FRAMEBUFFER_NATIVE_HEIGHT, tbheight, maximized);
+			rc = CalculateDisplayLayoutWrapper(rc, GPU_FRAMEBUFFER_NATIVE_WIDTH * 4 / 3, GPU_FRAMEBUFFER_NATIVE_HEIGHT, tbheight, maximized);
 
 			wndWidth = (rc.bottom - rc.top) - tbheight;
 			wndHeight = (rc.right - rc.left);
@@ -851,11 +848,11 @@ void UpdateWndRects(HWND hwnd, RECT* newClientRect)
 				//apply logic to correct things if forced integer is selected
 				if ((video.rotation == 90) || (video.rotation == 270))
 				{
-					rc = CalculateDisplayLayoutWrapper(rc, (GPU_FRAMEBUFFER_NATIVE_HEIGHT * 2) + video.screengap, GPU_FRAMEBUFFER_NATIVE_WIDTH, tbheight, maximized);
+					rc = CalculateDisplayLayoutWrapper(rc, (GPU_FRAMEBUFFER_NATIVE_HEIGHT * 2) + video.screengap, GPU_FRAMEBUFFER_NATIVE_WIDTH * 4 / 3, tbheight, maximized);
 				}
 				else
 				{
-					rc = CalculateDisplayLayoutWrapper(rc, GPU_FRAMEBUFFER_NATIVE_WIDTH, (GPU_FRAMEBUFFER_NATIVE_HEIGHT * 2) + video.screengap, tbheight, maximized);
+					rc = CalculateDisplayLayoutWrapper(rc, GPU_FRAMEBUFFER_NATIVE_WIDTH * 4 / 3, (GPU_FRAMEBUFFER_NATIVE_HEIGHT * 2) + video.screengap, tbheight, maximized);
 				}
 
 				if ((video.rotation == 90) || (video.rotation == 270))
